@@ -32,11 +32,11 @@ function SMS(params){
     this.sendBulk = function(msg,users,callback){
 
         var phones = users.reduce(function(list,obj){
-            if (obj.phoneNumber){
+            if (obj.phoneNumber && obj.phoneNumber.length>12){
                 list.push(obj.phoneNumber);
             }
             return list;
-        },[]).join(";");
+        },[]).join(",");
         
         var data = {
             to:phones,

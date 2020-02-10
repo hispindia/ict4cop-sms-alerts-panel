@@ -152,7 +152,7 @@ export function WatchPanel(props){
     </select>
         </td>
 
-        <td>Select Status </td>
+        <td>Select Message Status </td>
         <td><select onChange={onEventStatusChange} value={eventStatus}>
         <option  value="all">All</option>
         <option  value="ACTIVE">Open</option>
@@ -176,6 +176,8 @@ export function WatchPanel(props){
         <tr>
         <th>Facility</th>
         <th>Date </th>
+        <th>Phone</th>
+
         <th>Identified Level</th>
         <th>SMS</th>
         <th>#</th>

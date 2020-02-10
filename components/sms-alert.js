@@ -4,6 +4,7 @@ import constants from '../constants';
 import sms from '../SMS';
 import moment from 'moment';
 import {treeOUService} from 'dhis2-ou-tree'
+import legacy from '../legacy.json';
 
 const apiWrapper = new api.wrapper();
 const SMS = new sms(constants.africas_talking_params);
@@ -16,6 +17,12 @@ export function SMSAlert(props){
         return map;
     },[]);
 
+    const legacyMap = legacy.reduce(function(map,obj){
+        map[obj.uid] = obj.event
+        return map;
+    },[]);
+
+    
     const [sentReceipt,setSentReceipt] = useState(function(){
 
         if (!eventDVMap[constants.de_sms_sent_status]){
@@ -109,7 +116,7 @@ export function SMSAlert(props){
         
         if (confirm(`Are you sure you want to continue?`)){
             setLoader(true);
-            SMS.sendBulk("[TEST]"+finalMessage,users,postSendSMS)
+            SMS.sendBulk(finalMessage,users,postSendSMS)
         }        
         
         function postSendSMS(error,response,body){
@@ -258,55 +265,6 @@ export function SMSAlert(props){
         return res;
     }
     
-    function getSentStatusDescription(callback){
-
-        if (!eventDVMap[constants.de_sms_sent_status]){
-            return "";
-        }else if( eventDVMap[constants.de_sms_sent_status].value!='SENT'){
-            return eventDVMap[constants.de_sms_sent_status].value;
-        }
-        
-        if (!eventDVMap[constants.de_sent_json]){
-            return "";
-        }
-
-        var smsResponse = getSentReceiptsStatus(eventDVMap[constants.de_sent_json]);
-        var str = (smsResponse.error?"ERROR":"SENT")+`--  ${eventDVMap[constants.de_sent_message]?eventDVMap[constants.de_sent_message].value:undefined}  \
-  TO--   ${smsResponse.receipts}`;
-
-        return str;
-
-        function getSentReceiptsStatus(data){
-
-            var error = false;
-            if (!data){
-                return "No Sent SMS Data Found";
-            }
-
-            try{
-                data = JSON.parse(data.value);
-            }catch(e){
-                return "Sent  Data not JSON parsed"
-            }
-
-            if (!data.response){
-                
-                return 
-            }
-
-            
-            var receipts = data.response.SMSMessageData.Recipients.reduce(function(list,obj){
-                if (obj.statusCode!=101){
-                    error=true;
-                }
-                list.push(`XXXXX${obj.number.substring(5,8)} ( ${obj.status})`);
-                
-                return list;
-            },[])
-   
-            return {receipts: receipts.join(" , "),error:error};
-        }
-    }
 
     function onRowClick(){
         setExpand(!expand);
@@ -320,7 +278,7 @@ export function SMSAlert(props){
         
         setRecipients( users.reduce(function(data,obj,index){
             data.push(<li>{obj.name}
-                      (  {obj.phoneNumber?"....."+obj.phoneNumber.substring(5,8):"NA"} )
+                      (  {obj.phoneNumber?obj.phoneNumber.substring(0,3)+"........."+obj.phoneNumber.substring(obj.phoneNumber.length-3,obj.phoneNumber.length):"NA"} )
                       </li>)
             return data;
         },[]));
@@ -330,10 +288,13 @@ export function SMSAlert(props){
     }
 
     function setSMSString(){
+        /*
         setFinalMessage(`${identifiedLevel?identifiedLevel.value:""} received \
 from ${event.orgUnitName} \
 on ${moment(event.eventDate).format("YYYY-MM-DD") }.
 ${comment?comment:""}`);
+        */
+        setFinalMessage(`${comment?comment:""}`);
 
     }
 
@@ -407,10 +368,20 @@ ${comment?comment:""}`);
         
         return path;
     }
+
+    function getPhone(){
+        
+        if (legacyMap[event.event]){
+            return legacyMap[event.event]+"`"
+        }
+
+        return eventDVMap[constants.de_phone]?eventDVMap[constants.de_phone].value:""
+    }
     
     return <tbody><tr  key={"tr_"+event.event}>
         <td key={"tr_ou_"+event.event}>{getOrgUnitPath(event.orgUnit)}</td>
         <td key={"tr_date_"+event.event}>{moment(event.eventDate).format("YYYY-MM-DD")}</td>
+        <td key={"tr_phone_"+event.event}>{getPhone()}</td>
         <td key={"tr_id_level_"+event.event}>{getIdentifiedLevel()}</td>
         <td key={"tr_sms_"+event.event}>{eventDVMap[constants.de_sms_content]?eventDVMap[constants.de_sms_content].value:"NULL"}</td>
         <td key={"tr_action_"+event.event} onClick={onRowClick}>
@@ -442,7 +413,7 @@ ${comment?comment:""}`);
         </ul>
         </td>
         <td colSpan="1">
-        <h4>SMS Preview</h4>
+        <h4>SMS Preview({finalMessage?finalMessage.length:""})</h4>
         {recipients?finalMessage:""}
     </td>
     

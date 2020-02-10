@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import constants from './constants';
 
-import {SelectionPanel} from './components/selection-panel';
 import {WatchPanel} from './components/watch-panel';
 
 import {TreeComponent} from 'dhis2-ou-tree'
