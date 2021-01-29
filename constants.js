@@ -13,9 +13,10 @@ exports.de_sent_json="zdc9Xu2tyuO";
 exports.user_group_default_level_code = "defaultLevel";
 
 exports.africas_talking_params = {
-    url : "https://www.ifipjwc2020.org/ict4cop_kenya_send_sms/",
-   // url : "http://localhost:8010/sendSMS",
-    apiKey : "1aba805e0ccbabe8dcb9c",
+    url : "https://api.africastalking.com/restless/send/",
+
+    Apikey : "",
+    //apiKey : "1aba805e0ccbabe8dcb9c",
     username : "",
     shortcode : ""
 }

@@ -27,7 +27,7 @@ export function SMSAlert(props){
 
         if (!eventDVMap[constants.de_sms_sent_status]){
             return "";
-        }else if( eventDVMap[constants.de_sms_sent_status].value!='SENT'){
+        }else if( eventDVMap[constants.de_sms_sent_status].value !=='SENT'){
             return eventDVMap[constants.de_sms_sent_status].value;
         }
         
@@ -56,7 +56,7 @@ export function SMSAlert(props){
     function getUsers(){
         var users = [];
 
-        if (props.userGroupMap.length==0){
+        if (props.userGroupMap.length===0){
             //    alert("No Responders Set.[User Groups Empty]. Please Contact Admin");
             //  return
         }
@@ -91,7 +91,7 @@ export function SMSAlert(props){
             },users);
         }
 
-        if (users.length==0){
+        if (users.length===0){
             alert("No Responders Set.[Users=0] Please contact Admin")
             return;
         }
@@ -102,7 +102,7 @@ export function SMSAlert(props){
     function verify(){
 
         var users = getUsers();
-        if (!users || users.length==0){
+        if (!users || users.length===0){
             return;
         }
         
@@ -170,7 +170,7 @@ export function SMSAlert(props){
         }
 
         try{
-            if (body.response.importCount.updated=="1" || body.response.importCount.imported=="1"){
+            if (body.response.importCount.updated==="1" || body.response.importCount.imported==="1"){
                 return "";
             }
         }catch(e){
@@ -252,7 +252,7 @@ export function SMSAlert(props){
             res.message= "SMS Response Not valid";
         }
 
-            
+        /*
         res.receipts = data.response.SMSMessageData.Recipients.reduce(function(list,obj){
             if (obj.statusCode!=101){
                 res.error=true;
@@ -261,7 +261,19 @@ export function SMSAlert(props){
             
             return list;
         },[]);
-        
+        */
+        console.log( "parseSMSResponse 1 -- " + data );
+        console.log( "parseSMSResponse 2 -- " + data.SMSMessageData.Message );
+        res.receipts = data.SMSMessageData.Recipients.reduce(function(list,obj){
+            if (obj.statusCode!==101){
+                res.error=true;
+            }
+            list.push(`XXXXX${obj.number.substring(5,8)} ( ${obj.status})`);
+
+            return list;
+        },[]);
+
+
         return res;
     }
     
