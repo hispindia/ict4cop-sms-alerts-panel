@@ -2,8 +2,10 @@
 function SMS(params){
 
     function post(data,callback){
-        var proxyURL = "https://cors-anywhere.herokuapp.com/";
-        var smsGetURL = "https://api.africastalking.com/restless/send?username=ict4cop-kenya&Apikey=" + data.message + "&to=" + data.to
+        //var proxyURL = "https://cors-anywhere.herokuapp.com/";
+         //user below cors server over heroko 
+        var proxyURL = "https://fatidique-choucroute-97606.herokuapp.com/";
+		var smsGetURL = "https://api.africastalking.com/restless/send?username=ict4cop-kenya&Apikey=" + data.message + "&to=" + data.to
         var finalURL = proxyURL + smsGetURL;
 
         var request = new XMLHttpRequest();
