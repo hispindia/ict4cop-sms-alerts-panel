@@ -1,50 +1,51 @@
 {
-  "name": "SMSPanel",
-  "version": "1.0.2",
+  "name": "SMSPanel-Working",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "webpack --mode production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/harsh-a1/react-skeleton.git"
   },
-  "author": "harsh",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/harsh-a1/react-skeleton/issues"
-  },
   "homepage": "https://github.com/harsh-a1/react-skeleton#readme",
   "dependencies": {
+    "axios": "^1.7.2",
     "dhis2-ou-tree": "^2.1.10",
-    "dhis2api": "^1.1.3",
+    "dhis2api": "^1.1.0",
     "moment": "^2.24.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "webpack": "^4.33.0",
-    "xlsx": "^0.14.3",
+    "webpack": "^5.92.1",
+    "xlsx": "^0.18.5",
     "xlsx-populate": "^1.14.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.24.7",
+    "@babel/core": "^7.24.7",
+    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
+    "@babel/preset-env": "^7.24.7",
+    "@babel/preset-react": "^7.24.7",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.4",
+    "babel-loader": "^9.1.3",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.26.0",
-    "webpack-cli": "^3.3.2"
+    "webpack-cli": "^5.1.4"
   },
   "babel": {
     "presets": [
-      "es2015",
-      "react",
-      "stage-0"
+      "@babel/preset-env",
+      "@babel/preset-react"
     ],
     "plugins": [
-      "transform-object-rest-spread"
+      "@babel/plugin-proposal-object-rest-spread"
     ]
   }
 }
