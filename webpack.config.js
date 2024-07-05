@@ -6,10 +6,9 @@ var parentDir = path.join(__dirname, './');
 module.exports = {
 
     node: {
-        console: false,
-        fs: 'empty',
-        net: 'empty',
-        tls: 'empty'
+        __dirname: false,
+        __filename: false,
+        global: true
     },
     entry: [
         path.join(parentDir, 'index.js')
@@ -18,15 +17,20 @@ module.exports = {
         rules: [{
             test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                loader: 'babel-loader'
+                loader: 'babel-loader',
+                options: {
+                    presets: ['@babel/preset-env', '@babel/preset-react'],
+                    plugins: ['@babel/plugin-proposal-object-rest-spread']
+                  }
             },{
                 test: /\.less$/,
-                loaders: ["style-loader", "css-loder", "less-loader"]
+                use: ["style-loader", "css-loder", "less-loader"]
             }
         ]
     },
     output: {
         path: parentDir + '/dist',
         filename: 'bundle.js'
-    }
+    },
+    
 }
