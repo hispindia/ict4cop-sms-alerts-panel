@@ -5,7 +5,7 @@ import sms from '../SMS';
 import moment from 'moment';
 import {treeOUService} from 'dhis2-ou-tree'
 import legacy from '../legacy.json';
-
+import axios from 'axios';
 const apiWrapper = new api.wrapper();
 const SMS = new sms(constants.africas_talking_params);
 
@@ -236,11 +236,31 @@ export function SMSAlert(props){
         })
     }
     
-    function saveEvent(callback){
-        var apiWrapper = new api.wrapper();
-        apiWrapper.putObj("events/"+event.event,event,callback)
-    }
-
+    function saveEvent(callback) {
+        console.log("Saving event:", event);
+      
+        // Log the full event object being sent
+        console.log("Event object:", JSON.stringify(event, null, 2));
+      
+        axios.put(`http://172.105.47.158/ict4cop_kenya/api/events/${event.event}`, event)
+          .then(response => {
+            console.log("API Response:", response);
+      
+            const responseBody = response.data;
+      
+            if (response.status !== 200) {
+              console.error("Unexpected response code:", response.status);
+              callback(new Error("Unexpected response code: " + response.status), response, responseBody);
+            } else {
+              console.log("Parsed Response Body:", responseBody);
+              callback(null, response, responseBody);
+            }
+          })
+          .catch(error => {
+            console.error("Error while saving the event:", error);
+            callback(error, null, null);
+          });
+      }
     function parseSMSResponse(data){
         var res = {
             error : false,
